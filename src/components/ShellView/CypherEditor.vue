@@ -253,8 +253,23 @@ export default {
       const cypher = this.editor.getValue();
       this.$emit("evaluateCypher", cypher);
     },
-    generateAndEvaluateQuery() {
-      this.$emit("generateAndEvaluateQuery", this.gptQuestion);
+    async generateAndEvaluateQuery() {
+      try {
+        const encodedQuery = encodeURIComponent(this.gptQuestion);
+        const response = await fetch(`http://localhost:7860/api/yoga/graph/${encodedQuery}`);
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+        const data = await response.json();
+        // Populate the cypher query editor with the result
+        const cypherQuery = data.cypher || data.query || JSON.stringify(data);
+        this.setEditorContent(cypherQuery);
+        // Switch to Cypher Query mode to show the result
+        this.isQueryGenerationMode = false;
+      } catch (error) {
+        console.error('Error calling yoga API:', error);
+        alert('Error generating query: ' + error.message);
+      }
     },
     evaluateCell() {
       if (this.isQueryGenerationMode) {

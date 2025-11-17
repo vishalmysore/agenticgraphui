@@ -32,7 +32,7 @@
             <div class="main-layout__sidebar-header flex justify-between items-center">
               <a
                 class="navbar-brand hide-on-collapse"
-                href="//kuzudb.com"
+                href="https://github.com/vishalmysore/vidyaastra"
                 target="_blank"
               >
                 <img
@@ -296,9 +296,7 @@ export default {
   computed: {
     ...mapStores(useModeStore),
     logoUrl() {
-      return this.modeStore.theme === 'vs-dark'
-        ? '/img/kuzu-logo-dark.png'
-        : '/img/kuzu-logo-light.png';
+      return '/vidyAAstra.png';
     },
   },
   mounted() {
@@ -582,7 +580,7 @@ body {
 }
 
 .main-layout__sidebar-logo {
-  height: 28px;
+  height: 50px;
   image-rendering: crisp-edges;
 }
 
