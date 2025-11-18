@@ -78,7 +78,10 @@
             <textarea
               ref="gptQuestionTextArea"
               v-model="gptQuestion"
-              placeholder="Type your question here..."
+              placeholder="Examples:&#10;• What are different poses of Yoga?&#10;• Find all yoga poses and their benefits&#10;• List poses with difficulty levels"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              title="Ask a natural language question about your data. The AI will convert it to a Cypher query."
             />
           </div>
         </main>
@@ -134,6 +137,7 @@ export default {
       gptQuestion: "",
       observer: null,
       editorResizeDebounce: null,
+      backendUrl: process.env.VUE_APP_BACKEND_URL || 'https://vishalmysore-vidyaastraserver.hf.space',
     }
   },
 
@@ -256,15 +260,13 @@ export default {
     async generateAndEvaluateQuery() {
       try {
         const encodedQuery = encodeURIComponent(this.gptQuestion);
-        const response = await fetch(`http://localhost:7860/api/yoga/graph/${encodedQuery}`);
+        const response = await fetch(`${this.backendUrl}/api/yoga/graph/${encodedQuery}`);
         if (!response.ok) {
           throw new Error(`API error: ${response.status}`);
         }
         const data = await response.json();
-        // Populate the cypher query editor with the result
         const cypherQuery = data.cypher || data.query || JSON.stringify(data);
         this.setEditorContent(cypherQuery);
-        // Switch to Cypher Query mode to show the result
         this.isQueryGenerationMode = false;
       } catch (error) {
         console.error('Error calling yoga API:', error);

@@ -28,6 +28,7 @@ if (CROSS_ORIGIN) {
 }
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8000;
 app.use(express.json({ limit: "128mb" }));
+
 app.use(`${baseUrl}api`, api);
 const distPath = path.join(__dirname, "..", "..", "dist");
 app.use(`${baseUrl}`, express.static(distPath, { maxAge: "30d" }));
